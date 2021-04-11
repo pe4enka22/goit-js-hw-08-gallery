@@ -71,7 +71,7 @@ galleryContainer.insertAdjacentHTML('beforeend',imagesList);
 
 
 function createGallery(images){
-  const markup = images.map(({preview, original, description}) => {
+  return images.map(({preview, original, description}) => {
     return `
    <li class="gallery__item">
      <a class="gallery__link"  href="${original}">
@@ -86,4 +86,70 @@ function createGallery(images){
   })
   .join('');
 }
+
+const backDrop = document.querySelector('.js-lightbox');
+
+galleryContainer.addEventListener('click', getOriginalImage);
+function getOriginalImage(event) {
+  event.preventDefault();
+  
+  //2
+
+  if (!event.target.classList.contains('gallery__image')) {
+    return;
+  }
+
+  //opening backdrop
+  backDrop.classList.add('is-open');
+  
+  //change source
+  const imgEl = document.querySelector('.lightbox__image');
+  imgEl.src = event.target.dataset.source;
+  imgEl.alt = event.target.alt;
+  
+  //closing backgrop
+  const closeButton = document.querySelector('.lightbox__button');
+  closeButton.addEventListener('click', backdropClose);
+  
+  function backdropClose(evt) {
+    imgEl.setAttribute('src', "");
+    imgEl.setAttribute('alt', "");
+    backDrop.classList.remove('is-open');
+  }
+  
+  const overlayEl = document.querySelector('.lightbox__overlay');
+  overlayEl.addEventListener('click', () => backDrop.classList.remove('is-open'));
+
+
+  window.addEventListener('keydown', onEscPress);
+  function onEscPress(e) {
+    if (e.code === 'Escape') {
+      backDrop.classList.remove('is-open');
+    }
+  }
+
+  //const allImages = images.map(image => image.original);
+  
+//let currentIndex = 0;
+
+//window.addEventListener('keydown', arrowClick);
+//function arrowClick(ev) {
+  //if (ev.code = "ArrowLeft") {
+    //currentIndex -= 1;
+  //} else if (ev.code = "ArrowRight") {
+    //currentIndex += 1;
+    //}
+//}
+  
+}
+ 
+
+
+
+
+  
+  
+  
+
+
 
